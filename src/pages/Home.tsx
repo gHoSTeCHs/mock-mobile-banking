@@ -11,7 +11,7 @@ const Home: React.FC = () => {
 	const { currentUser, cards, transactions, contacts } = useAppContext();
 
 	return (
-		<div className="pb-20">
+		<div className="pb-20 h-screen">
 			<div className="p-5">
 				<div className="flex justify-between items-center mb-6">
 					<div className="flex items-center">
