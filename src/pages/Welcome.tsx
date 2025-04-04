@@ -7,8 +7,9 @@ const Welcome: React.FC = () => {
 			<div className="flex-1 flex flex-col justify-center items-center">
 				<div className="w-full max-w-md">
 					{/* Credit Card Graphics */}
-					<div className="relative mb-6">
-						<div className="absolute -top-4 left-4 w-full max-w-xs rounded-xl overflow-hidden shadow-lg z-10">
+
+					<div className="relative mb-6 opacity-90 -z-20">
+						<div className="absolute -top-4 left-1 w-full max-w-xs rounded-xl overflow-hidden shadow-lg z-10">
 							<div className="bg-gradient-to-r from-blue-400 to-blue-600 p-6 text-white">
 								<div className="flex justify-between mb-8">
 									<div className="flex flex-col">
@@ -63,7 +64,7 @@ const Welcome: React.FC = () => {
 							</div>
 						</div>
 
-						<div className="absolute top-10 left-12 w-full max-w-xs rounded-xl overflow-hidden shadow-lg">
+						<div className="absolute top-10 left-7 w-full max-w-xs rounded-xl overflow-hidden shadow-lg">
 							<div className="bg-gradient-to-r from-blue-700 to-blue-900 p-6 text-white">
 								<div className="flex justify-between mb-8">
 									<div className="flex flex-col">
@@ -120,7 +121,7 @@ const Welcome: React.FC = () => {
 					</div>
 
 					<div className="mt-32 text-center">
-						<h1 className="text-3xl font-bold mb-2">Innovative Digital App</h1>
+						<h1 className="text-3xl font-bold mb-2">Innovative Banking App</h1>
 						<h2 className="text-2xl font-bold mb-4">Financial Planner</h2>
 						<p className="text-gray-600 mb-8">
 							Finano Help you to manage your financial
@@ -137,12 +138,12 @@ const Welcome: React.FC = () => {
 					className="block w-full bg-blue-500 text-white rounded-lg py-3 text-center font-medium mb-4">
 					Get Started
 				</Link>
-				<div className="text-center text-gray-500">
+				{/* <div className="text-center text-gray-500">
 					Doesn't have an account?{' '}
 					<Link to="/signup" className="text-blue-500 font-medium">
 						Sign Up
 					</Link>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);
