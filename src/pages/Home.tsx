@@ -5,6 +5,7 @@ import BottomNavigation from '../components/BottomNavigation';
 import CreditCard from '../components/CreditCard';
 import ContactBubble from '../components/ContactBubble';
 import TransactionItem from '../components/TransactionItem';
+import { images } from '../constants';
 
 const Home: React.FC = () => {
 	const { currentUser, cards, transactions, contacts } = useAppContext();
@@ -16,7 +17,7 @@ const Home: React.FC = () => {
 					<div className="flex items-center">
 						<div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden mr-3">
 							<img
-								src={currentUser.avatar || `/api/placeholder/40/40`}
+								src={currentUser.avatar || images.user1}
 								alt={currentUser.name}
 								className="h-full w-full object-cover"
 							/>

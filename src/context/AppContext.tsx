@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Card, Transaction, ExpenseCategory } from '../types';
+import { images } from '../constants';
 
 interface AppContextType {
 	currentUser: User;
@@ -17,7 +18,7 @@ const defaultContext: AppContextType = {
 	currentUser: {
 		id: '1',
 		name: 'Ronaldinho Fazio',
-		avatar: '/avatars/user.png',
+		avatar: images.user1,
 	},
 	cards: [],
 	transactions: [],
@@ -65,11 +66,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 		]);
 
 		setContacts([
-			{ id: '2', name: 'Adrian', avatar: '/avatars/adrian.png' },
-			{ id: '3', name: 'Jaya', avatar: '/avatars/jaya.png' },
-			{ id: '4', name: 'Enrico', avatar: '/avatars/enrico.png' },
-			{ id: '5', name: 'Malik', avatar: '/avatars/malik.png' },
-			{ id: '6', name: 'Adit', avatar: '/avatars/adit.png' },
+			{ id: '2', name: 'Adrian', avatar: images.user2 },
+			{ id: '3', name: 'Jaya', avatar: images.user3 },
+			{ id: '4', name: 'Enrico', avatar: images.user4 },
+			{ id: '5', name: 'Malik', avatar: images.user5 },
+			{ id: '6', name: 'Adit', avatar: images.user6 },
 		]);
 
 		const mockTransactions: Transaction[] = [
