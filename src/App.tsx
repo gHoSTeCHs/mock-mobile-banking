@@ -3,7 +3,7 @@ import './App.css';
 function App() {
 	return (
 		<>
-			<p className="text-3xl font-bold underline">Hello</p>
+			<p className="text-3xl font-bold underline text-red-900 ">Hello</p>
 		</>
 	);
 }
