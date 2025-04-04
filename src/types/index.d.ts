@@ -22,6 +22,7 @@ export interface Transaction {
 	category: 'entertainment' | 'food' | 'investment' | 'transfer' | 'other';
 	recipient?: string;
 	status: 'completed' | 'processing' | 'failed';
+	notes?: string;
 }
 
 export interface ExpenseCategory {
