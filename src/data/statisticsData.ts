@@ -338,6 +338,6 @@ export const monthlyData = months.map((_, index) => {
 		transactions,
 		expenses,
 		totalSpent,
-		percentageChange: (Math.random() * 30 - 15).toFixed(1), // Random change between -15% and +15%
+		percentageChange: (Math.random() * 30 - 15).toFixed(1),
 	};
 });

@@ -18,4 +18,5 @@ export default {
 	user7,
 	user8,
 	user9,
+	defaultAvatar: user1,
 };

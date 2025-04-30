@@ -74,7 +74,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 			{ id: '6', name: 'Adit', avatar: images.user6 },
 		]);
 
-		// Removed mockTransactions definition
 		setTransactions(mockTransactions);
 
 		setExpenses([
