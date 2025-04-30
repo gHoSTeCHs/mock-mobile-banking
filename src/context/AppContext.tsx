@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Card, Transaction, ExpenseCategory } from '../types';
 import { images } from '../constants';
+import { mockTransactions } from '../data/statisticsData';
 
 interface AppContextType {
 	currentUser: User;
@@ -73,49 +74,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 			{ id: '6', name: 'Adit', avatar: images.user6 },
 		]);
 
-		const mockTransactions: Transaction[] = [
-			{
-				id: '1',
-				title: 'Netflix Subscriptions',
-				amount: -150.0,
-				date: new Date('2024-06-20T13:50:00'),
-				category: 'entertainment',
-				status: 'completed',
-			},
-			{
-				id: '2',
-				title: 'Grocery Shopping',
-				amount: -84.52,
-				date: new Date('2024-06-19T15:23:00'),
-				category: 'food',
-				status: 'completed',
-			},
-			{
-				id: '3',
-				title: 'Investment Deposit',
-				amount: 1250.0,
-				date: new Date('2024-06-18T09:15:00'),
-				category: 'investment',
-				status: 'completed',
-			},
-			{
-				id: '4',
-				title: 'Transfer to Jaya',
-				amount: -350.0,
-				date: new Date('2024-06-17T14:30:00'),
-				category: 'transfer',
-				recipient: 'Jaya',
-				status: 'completed',
-			},
-			{
-				id: '5',
-				title: 'Salary Deposit',
-				amount: 3750.0,
-				date: new Date('2024-06-15T08:00:00'),
-				category: 'other',
-				status: 'completed',
-			},
-		];
+		// Removed mockTransactions definition
 		setTransactions(mockTransactions);
 
 		setExpenses([
@@ -136,7 +95,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 			...transactionData,
 			id: `tx-${Date.now()}`,
 			date: new Date(),
-			status: Math.random() > 0.1 ? 'completed' : 'failed', // 10% chance of failure for demo
+			status: Math.random() > 0.1 ? 'completed' : 'failed',
 		};
 
 		if (newTransaction.status === 'completed' && newTransaction.amount < 0) {

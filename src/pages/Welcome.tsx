@@ -37,7 +37,7 @@ const Welcome: React.FC = () => {
 								</div>
 								<div className="flex justify-between items-end">
 									<div>
-										<div className="text-xs opacity-80">D Marylandit</div>
+										<div className="text-xs opacity-80">D Maryland</div>
 										<div className="text-xs opacity-80">12/24</div>
 									</div>
 									<div className="flex">
