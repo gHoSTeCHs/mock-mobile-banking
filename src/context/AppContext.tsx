@@ -3,6 +3,8 @@ import { User, Card, Transaction, ExpenseCategory } from '../types';
 import { images } from '../constants';
 import { mockTransactions } from '../data/statisticsData';
 
+const DAILY_TRANSFER_LIMIT = 1000;
+
 interface AppContextType {
 	currentUser: User;
 	cards: Card[];
@@ -11,8 +13,10 @@ interface AppContextType {
 	expenses: ExpenseCategory[];
 	addTransaction: (
 		transaction: Omit<Transaction, 'id' | 'date' | 'status'>
-	) => Promise<void>;
+	) => Promise<{ success: boolean; message: string }>;
 	isProcessing: boolean;
+	dailyTransferTotal: number;
+	toggleCardFreeze: (cardId: string) => void;
 }
 
 const defaultContext: AppContextType = {
@@ -25,8 +29,10 @@ const defaultContext: AppContextType = {
 	transactions: [],
 	contacts: [],
 	expenses: [],
-	addTransaction: async () => {},
+	addTransaction: async () => ({ success: false, message: 'Not implemented' }),
 	isProcessing: false,
+	dailyTransferTotal: 0,
+	toggleCardFreeze: () => {},
 };
 
 const AppContext = createContext<AppContextType>(defaultContext);
@@ -43,6 +49,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [contacts, setContacts] = useState<User[]>([]);
 	const [expenses, setExpenses] = useState<ExpenseCategory[]>([]);
 	const [isProcessing, setIsProcessing] = useState(false);
+	const [dailyTransferTotal, setDailyTransferTotal] = useState(0);
+
+	const calculateTodaysTransfers = (currentTransactions: Transaction[]) => {
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		return currentTransactions
+			.filter(
+				(tx) =>
+					tx.category === 'transfer' &&
+					tx.amount < 0 &&
+					tx.status !== 'failed' &&
+					tx.date >= today
+			)
+			.reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+	};
 
 	useEffect(() => {
 		setCards([
@@ -54,6 +76,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 				type: 'mastercard',
 				balance: 12893.84,
 				color: 'blue',
+				isFrozen: false,
 			},
 			{
 				id: '2',
@@ -63,6 +86,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 				type: 'mastercard',
 				balance: 7562.45,
 				color: 'dark-blue',
+				isFrozen: true,
 			},
 		]);
 
@@ -74,7 +98,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 			{ id: '6', name: 'Adit', avatar: images.user6 },
 		]);
 
-		setTransactions(mockTransactions);
+		const initialTransactions = mockTransactions;
+		setTransactions(initialTransactions);
+		setDailyTransferTotal(calculateTodaysTransfers(initialTransactions));
 
 		setExpenses([
 			{ category: 'Investment', amount: 6345.6, color: 'bg-blue-500' },
@@ -83,34 +109,100 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 		]);
 	}, []);
 
+	useEffect(() => {
+		setDailyTransferTotal(calculateTodaysTransfers(transactions));
+	}, [transactions]);
+
 	const addTransaction = async (
 		transactionData: Omit<Transaction, 'id' | 'date' | 'status'>
-	) => {
+	): Promise<{ success: boolean; message: string }> => {
 		setIsProcessing(true);
 
-		await new Promise((resolve) => setTimeout(resolve, 2000));
+		if (transactionData.category === 'transfer' && transactionData.amount < 0) {
+			const potentialTotal =
+				dailyTransferTotal + Math.abs(transactionData.amount);
+			if (potentialTotal > DAILY_TRANSFER_LIMIT) {
+				setIsProcessing(false);
+				return {
+					success: false,
+					message: `Transfer failed. Exceeds daily limit of $${DAILY_TRANSFER_LIMIT.toFixed(
+						2
+					)}. Today's total: $${dailyTransferTotal.toFixed(2)}`,
+				};
+			}
+		}
 
 		const newTransaction: Transaction = {
 			...transactionData,
 			id: `tx-${Date.now()}`,
 			date: new Date(),
-			status: Math.random() > 0.1 ? 'completed' : 'failed',
+			status: 'pending',
 		};
 
-		if (newTransaction.status === 'completed' && newTransaction.amount < 0) {
-			setCards((prevCards) =>
-				prevCards.map((card) =>
-					card.id === '1'
-						? { ...card, balance: card.balance + newTransaction.amount }
-						: card
-				)
-			);
-		}
-
 		setTransactions((prev) => [newTransaction, ...prev]);
+
+		await new Promise((resolve) =>
+			setTimeout(resolve, Math.random() * 2000 + 3000)
+		);
+
+		const finalStatus = Math.random() > 0.1 ? 'completed' : 'failed';
+
+		setTransactions((prev) =>
+			prev.map((tx) => {
+				if (tx.id === newTransaction.id) {
+					const updatedTx = {
+						...tx,
+						status: finalStatus as Transaction['status'],
+					};
+
+					if (
+						finalStatus === 'completed' &&
+						updatedTx.category === 'transfer' &&
+						updatedTx.amount < 0
+					) {
+						setCards((prevCards) =>
+							prevCards.map((card) =>
+								card.id === '1'
+									? {
+											...card,
+											balance: card.balance + updatedTx.amount,
+									  }
+									: card
+							)
+						);
+					} else if (finalStatus === 'completed' && updatedTx.amount > 0) {
+						setCards((prevCards) =>
+							prevCards.map((card) =>
+								card.id === '1'
+									? { ...card, balance: card.balance + updatedTx.amount }
+									: card
+							)
+						);
+					}
+
+					return updatedTx;
+				}
+				return tx;
+			})
+		);
+
 		setIsProcessing(false);
 
-		return Promise.resolve();
+		return {
+			success: finalStatus === 'completed',
+			message:
+				finalStatus === 'completed'
+					? 'Transaction completed successfully.'
+					: 'Transaction failed.',
+		};
+	};
+
+	const toggleCardFreeze = (cardId: string) => {
+		setCards((prevCards) =>
+			prevCards.map((card) =>
+				card.id === cardId ? { ...card, isFrozen: !card.isFrozen } : card
+			)
+		);
 	};
 
 	return (
@@ -123,6 +215,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 				expenses,
 				addTransaction,
 				isProcessing,
+				dailyTransferTotal,
+				toggleCardFreeze,
 			}}>
 			{children}
 		</AppContext.Provider>

@@ -12,6 +12,7 @@ export interface Card {
 	type: 'mastercard' | 'visa';
 	balance: number;
 	color: 'blue' | 'dark-blue';
+	isFrozen: boolean;
 }
 
 export interface Transaction {
@@ -21,7 +22,7 @@ export interface Transaction {
 	date: Date;
 	category: 'entertainment' | 'food' | 'investment' | 'transfer' | 'other';
 	recipient?: string;
-	status: 'completed' | 'processing' | 'failed';
+	status: 'completed' | 'processing' | 'failed' | 'pending';
 	notes?: string;
 }
 

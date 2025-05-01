@@ -74,9 +74,9 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
 					<p className="text-xs text-gray-500">
 						{formatDate(transaction.date)}
 					</p>
-					{transaction.status === 'processing' && (
+					{transaction.status === 'pending' && (
 						<span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">
-							Processing
+							Pending
 						</span>
 					)}
 					{transaction.status === 'failed' && (

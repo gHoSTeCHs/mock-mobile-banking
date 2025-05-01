@@ -4,7 +4,7 @@ import BottomNavigation from '../components/BottomNavigation';
 import CreditCard from '../components/CreditCard';
 
 const Cards: React.FC = () => {
-	const { cards } = useAppContext();
+	const { cards, toggleCardFreeze } = useAppContext();
 
 	return (
 		<div className="pb-20">
@@ -45,7 +45,19 @@ const Cards: React.FC = () => {
 
 				<div className="space-y-6">
 					{cards.map((card) => (
-						<CreditCard key={card.id} card={card} />
+						<div key={card.id} className="mb-4">
+							<CreditCard card={card} />
+							<button
+								className={`mt-2 w-full py-2 px-4 rounded-lg text-white ${
+									card.isFrozen
+										? 'bg-green-500 hover:bg-green-600'
+										: 'bg-red-500 hover:bg-red-600'
+								}`}
+								onClick={() => toggleCardFreeze(card.id)}
+								title={card.isFrozen ? 'Unfreeze Card' : 'Freeze Card'}>
+								{card.isFrozen ? 'Unfreeze Card' : 'Freeze Card'}
+							</button>
+						</div>
 					))}
 				</div>
 

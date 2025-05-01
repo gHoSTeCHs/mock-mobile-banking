@@ -40,6 +40,25 @@ const CreditCard: React.FC<CreditCardProps> = ({
 	return (
 		<div
 			className={`${getCardColor()} rounded-xl p-5 w-full h-56 shadow-lg relative overflow-hidden mb-4`}>
+			{card.isFrozen && (
+				<div className="absolute inset-0 bg-black bg-opacity-50 rounded-xl flex flex-col items-center justify-center z-10">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						className="h-10 w-10 text-white mb-2"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={2}
+							d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+						/>
+					</svg>
+					<p className="text-white text-lg font-semibold">Frozen</p>
+				</div>
+			)}
+
 			<div className="flex justify-between">
 				<div className="h-10 w-10 rounded-md bg-yellow-100/30 backdrop-blur-sm flex items-center justify-center">
 					<div className="h-6 w-8 bg-yellow-300/80 rounded-sm"></div>
@@ -99,12 +118,12 @@ const CreditCard: React.FC<CreditCardProps> = ({
 			</div>
 			<div className="absolute left-10 top-20 opacity-10">
 				<svg
-					width="60"
-					height="60"
-					viewBox="0 0 60 60"
+					width="100"
+					height="100"
+					viewBox="0 0 100 100"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg">
-					<circle cx="30" cy="30" r="30" fill="white" fillOpacity="0.2" />
+					<circle cx="20" cy="80" r="50" fill="white" fillOpacity="0.2" />
 				</svg>
 			</div>
 		</div>
